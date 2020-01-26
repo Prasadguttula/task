@@ -1,26 +1,68 @@
 import React from 'react';
-import logo from './logo.svg';
+import {BrowserRouter as Router,Route} from 'react-router-dom';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Header } from './components/Header.js';
+import Footer from './components/footer/Footer';
+import Navbar from './components/navbar/Navbar';
+import Home from './components/home/Home';
+import Application from './components/application/Application';
+import Details from './components/details/Details';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+    state={
+      details:[
+        {
+          id:1,
+          uname:'John',
+          mob:7894561312,
+          pan:'EOYTER8745N'
+        },
+        {
+          id:2,
+          uname:'Billy',
+          mob:8594561313,
+          pan:'AEYTER8745N'
+        },
+        {
+          id:3,
+          uname:'Nancy',
+          mob:6394561319,
+          pan:'BIYTER8745N'
+        }
+      ]
+    }
+    
+    addUser=(x,y,z)=>{
+      const newUser={
+        id:this.state.details.length+1,
+        uname:x,
+        mob:y,
+        pan:z
+      }
+      this.setState({details:[...this.state.details,newUser]})
+    }
+    delUser=(id)=>{
+      this.setState({details:[...this.state.details.filter(user=>user.id!==id)]})
+      
+     }
+  render(){
+    return (
+      <Router>
+        <Header/>
+        <Navbar/>
+        <Route exact path="/" render={props=>(
+          <React.Fragment>
+            <Home len={this.state.details.length}/>
+          </React.Fragment>
+        )}/>
+        <Route path="/details"><Details delUser={this.delUser} users={this.state.details}/></Route>
+        <Route path="/app"><Application addUser={this.addUser} /></Route>
+        <Footer/>
+      </Router>
+    );
+  }
 }
 
 export default App;
