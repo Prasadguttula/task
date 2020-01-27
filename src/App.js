@@ -2,6 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router,Route} from 'react-router-dom';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { Header } from './components/Header.js';
 import Footer from './components/footer/Footer';
 import Navbar from './components/navbar/Navbar';
@@ -47,6 +48,14 @@ class App extends React.Component {
       this.setState({details:[...this.state.details.filter(user=>user.id!==id)]})
       
      }
+     nameChange=(id,uname)=>{
+      this.setState({details:this.state.details.map(user=>{
+        if(user.id===id){
+          user.uname=uname;
+        }
+        return user;
+      })})
+     }
   render(){
     return (
       <Router>
@@ -57,7 +66,10 @@ class App extends React.Component {
             <Home len={this.state.details.length}/>
           </React.Fragment>
         )}/>
-        <Route path="/details"><Details delUser={this.delUser} users={this.state.details}/></Route>
+        <Route path="/details"><Details 
+        delUser={this.delUser} 
+        nameChange={this.nameChange}
+        users={this.state.details}/></Route>
         <Route path="/app"><Application addUser={this.addUser} /></Route>
         <Footer/>
       </Router>
